@@ -20,28 +20,6 @@
 <p>Il y a quelques jours, j'avais une idée simple : un bot WhatsApp capable de lire et écrire dans mes pages Notion, alimenté par une IA.</p>
 <p>Résultat ? SL2S-Bot tourne en production sur un VPS depuis ce soir. Et j'ai tout documenté pour toi.</p>
 
-  <h2>🔐 Sécurité Avancée : Le vrai mode "Bunker"</h2>
-<p>L'installation de base est rapide, mais pour un serveur en production, le document officiel recommande 4 couches de protection supplémentaires :</p>
-
-<p><strong>1. Verrouiller le fichier des secrets (Permissions Linux)</strong><br>
-Ton fichier de configuration contient tes clés d'API (Notion, Google)[cite: 10, 90, 93]. Il est impératif de le protéger physiquement au niveau du système pour que seul ton utilisateur puisse le lire :<br>
-<code>chmod 600 ~/.openclaw/openclaw.json</code> [cite: 91]</p>
-
-<p><strong>2. Le "System Prompt" restrictif</strong><br>
-Il faut brider le comportement de l'IA directement dans sa mémoire[cite: 154]. Voici le prompt recommandé pour éviter les catastrophes :<br>
-<code>"Tu es un assistant de programmation. Tes actions sont limitées au dossier de travail actuel. Tu ne dois JAMAIS : Sortir du dossier racine du projet (cd.. est interdit). Lire les fichiers cachés (commençant par un point.). Accéder au dossier .ssh ou aux fichiers .env. Exécuter des commandes de suppression massive (rm -rf)."</code> [cite: 154, 155, 156, 157, 158]</p>
-
-<p><strong>3. Isoler l'accès Web avec Tailscale</strong><br>
-Plutôt que d'exposer l'interface de ton bot sur l'internet public, tu peux la lier à un réseau privé virtuel comme Tailscale[cite: 121, 128]. Lance la Gateway avec cette commande :<br>
-<code>openclaw gateway --bind tailnet</code> [cite: 121]<br>
-L'accès se fera alors via une IP locale sécurisée, du type <code>http://100.x.x.x:11111</code>[cite: 129].</p>
-
-<p><strong>4. L'alternative pour le 24h/24 : Screen</strong><br>
-Si tu préfères garder un œil sur le terminal en permanence (au lieu d'utiliser <code>systemctl</code> en arrière-plan) [cite: 118, 140], tu peux utiliser un terminal virtuel persistant[cite: 118]:<br>
-• Créer la session : <code>screen -S mon-ia</code> [cite: 120]<br>
-• Quitter sans couper le bot (Détacher) : <code>Ctrl + A, puis D</code> [cite: 123]<br>
-• Y retourner plus tard : <code>screen -r mon-ia</code> [cite: 125]</p>
-
 <h2>🛠️ La stack technique (sans prise de tête)</h2>
 <p>J'ai utilisé <strong>OpenClaw</strong>, une plateforme open-source d'agents IA basée sur Node.js. Le principe : un fichier JSON central qui connecte tout ensemble.</p>
 <p>• 🤖 Modèle : Google Gemini 2.0 Flash Lite (gratuit via AI Studio)<br>
@@ -62,6 +40,28 @@ Si tu préfères garder un œil sur le terminal en permanence (au lieu d'utilise
 • <strong>sandbox: docker</strong> → chaque exécution de code est isolée dans un conteneur<br>
 • <strong>auth.token</strong> → l'interface web est protégée par mot de passe</p>
 <p>Le principe du Moindre Privilège appliqué à l'IA. Simple et efficace.</p>
+
+<h2>🔐 Sécurité Avancée : Le vrai mode "Bunker"</h2>
+<p>L'installation de base est rapide, mais pour un serveur en production, le document officiel recommande 4 couches de protection supplémentaires :</p>
+
+<p><strong>1. Verrouiller le fichier des secrets (Permissions Linux)</strong><br>
+Ton fichier de configuration contient tes clés d'API (Notion, Google). Il est impératif de le protéger physiquement au niveau du système pour que seul ton utilisateur puisse le lire :<br>
+<code>chmod 600 ~/.openclaw/openclaw.json</code></p>
+
+<p><strong>2. Le "System Prompt" restrictif</strong><br>
+Il faut brider le comportement de l'IA directement dans sa mémoire. Voici le prompt recommandé pour éviter les catastrophes :<br>
+<code>"Tu es un assistant de programmation. Tes actions sont limitées au dossier de travail actuel. Tu ne dois JAMAIS : Sortir du dossier racine du projet (cd.. est interdit). Lire les fichiers cachés (commençant par un point.). Accéder au dossier .ssh ou aux fichiers .env. Exécuter des commandes de suppression massive (rm -rf)."</code></p>
+
+<p><strong>3. Isoler l'accès Web avec Tailscale</strong><br>
+Plutôt que d'exposer l'interface de ton bot sur l'internet public, tu peux la lier à un réseau privé virtuel comme Tailscale. Lance la Gateway avec cette commande :<br>
+<code>openclaw gateway --bind tailnet</code><br>
+L'accès se fera alors via une IP locale sécurisée, du type <code>http://100.x.x.x:11111</code>.</p>
+
+<p><strong>4. L'alternative pour le 24h/24 : Screen</strong><br>
+Si tu préfères garder un œil sur le terminal en permanence (au lieu d'utiliser <code>systemctl</code> en arrière-plan), tu peux utiliser un terminal virtuel persistant :<br>
+• Créer la session : <code>screen -S mon-ia</code><br>
+• Quitter sans couper le bot (Détacher) : <code>Ctrl + A, puis D</code><br>
+• Y retourner plus tard : <code>screen -r mon-ia</code></p>
 
 <h2>⚠️ Les 4 bugs que j'ai rencontrés (et leurs solutions)</h2>
 <p><strong>Bug 1 — L'IA écrit du Python au lieu de répondre</strong><br>Fix : désactiver l'interpréteur dans le JSON + profil "messaging".</p>
