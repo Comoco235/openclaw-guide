@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Article LinkedIn — OpenClaw</title>
+<style>
+  body { font-family: Arial, sans-serif; max-width: 680px; margin: 40px auto; padding: 20px; color: #1a1a1a; line-height: 1.6; }
+  h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+  .subtitle { color: #666; font-size: 15px; margin-bottom: 32px; }
+  h2 { font-size: 18px; font-weight: 700; margin: 28px 0 8px; }
+  p { font-size: 15px; margin-bottom: 12px; color: #333; }
+  code { background: #f3f4f6; padding: 2px 7px; border-radius: 4px; font-family: monospace; font-size: 13px; color: #0a66c2; }
+  .tags { margin-top: 32px; color: #0a66c2; font-size: 14px; line-height: 2; }
+</style>
+</head>
+<body>
+<h1>J'ai déployé mon propre agent IA en production en une soirée. Voilà exactement comment j'ai fait 🦞</h1>
+<p class="subtitle">Article LinkedIn • OpenClaw + Gemini + WhatsApp + Notion</p>
+
+<p>Il y a quelques jours, j'avais une idée simple : un bot WhatsApp capable de lire et écrire dans mes pages Notion, alimenté par une IA.</p>
+<p>Résultat ? SL2S-Bot tourne en production sur un VPS depuis ce soir. Et j'ai tout documenté pour toi.</p>
+
+<h2>🛠️ La stack technique (sans prise de tête)</h2>
+<p>J'ai utilisé <strong>OpenClaw</strong>, une plateforme open-source d'agents IA basée sur Node.js. Le principe : un fichier JSON central qui connecte tout ensemble.</p>
+<p>• 🤖 Modèle : Google Gemini 2.0 Flash Lite (gratuit via AI Studio)<br>
+• 📱 Canal : WhatsApp via le skill wacli<br>
+• 📝 Mémoire : Notion via intégration API<br>
+• 🖥️ Hébergement : VPS Linux, accès SSH</p>
+
+<h2>🚀 Les 3 commandes qui changent tout</h2>
+<p>Une fois connecté en SSH, l'installation se résume à ça :</p>
+<p><code>curl -sSL https://openclaw.io/install.sh | bash</code><br>
+<code>openclaw configure</code><br>
+<code>systemctl --user enable openclaw-gateway.service</code></p>
+<p>Trois commandes. Le bot tourne 24h/24, même PC éteint.</p>
+
+<h2>🛡️ Le point qui m'a le plus surpris : la sécurité</h2>
+<p>OpenClaw intègre un mode "Bunker" que je recommande à 100% :</p>
+<p>• <strong>elevated: false</strong> → l'IA n'a pas les droits admin sur ton serveur<br>
+• <strong>sandbox: docker</strong> → chaque exécution de code est isolée dans un conteneur<br>
+• <strong>auth.token</strong> → l'interface web est protégée par mot de passe</p>
+<p>Le principe du Moindre Privilège appliqué à l'IA. Simple et efficace.</p>
+
+<h2>⚠️ Les 4 bugs que j'ai rencontrés (et leurs solutions)</h2>
+<p><strong>Bug 1 — L'IA écrit du Python au lieu de répondre</strong><br>Fix : désactiver l'interpréteur dans le JSON + profil "messaging".</p>
+<p><strong>Bug 2 — openclaw doctor efface ta config</strong><br>Fix : toujours sauvegarder <code>openclaw.json</code> avant. Toujours.</p>
+<p><strong>Bug 3 — Notion ne voit aucune page malgré la clé API</strong><br>Fix : sur Notion → page → ... → Connect to → sélectionner ton intégration. Étape invisible mais bloquante.</p>
+<p><strong>Bug 4 — Une virgule oubliée bloque tout</strong><br>Fix : <code>jq . /root/.openclaw/openclaw.json</code> avant chaque redémarrage.</p>
+
+<h2>✅ Ma checklist avant de fermer le terminal</h2>
+<p>□ openclaw status affiche tout en vert<br>
+□ QR Code WhatsApp scanné<br>
+□ Intégration Notion autorisée sur au moins une page<br>
+□ Sauvegarde du JSON sur mon PC<br>
+□ openclaw security audit sans erreur critique</p>
+
+<h2>💡 Ce que j'en retiens</h2>
+<p>Déployer un agent IA en production n'est plus réservé aux équipes avec 3 ingénieurs DevOps. Avec les bons outils, une soirée suffit.</p>
+<p>Ce qui prend du temps, c'est comprendre les subtilités (le JSON, les permissions Notion, le mode Bunker). Mais une fois documenté, tout devient reproductible.</p>
+<p>Je partage la doc complète en commentaire. Si tu as des questions sur la config ou tu veux déployer un agent similaire, écris-moi. 👇</p>
+
+<div class="tags">
+#IntelligenceArtificielle #IA #DevOps #Automation #Notion #WhatsApp #OpenSource #ProductivityHacks #AIAgents #SideProject
+</div>
+</body>
+</html>
