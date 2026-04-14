@@ -2,8 +2,6 @@
 
 Guide pour installer et configurer un agent IA OpenClaw sur VPS (WhatsApp + Notion, sécurisé).
 
-👉 Accéder à l'article :
-https://Comoco235.github.io/openclaw-guide/
 
 ## Contenu
 - Installation rapide
